@@ -1,10 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>User registration form</title>
+
+    <link rel="stylesheet" th:href="@{/css/register.css}"/>
+
+
 </head>
 <body>
-$END$
+<div class="container">
+
+    <form th:action="@{/registration/register}" method="post" th:object="${registrationRequest}" class="form">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div class="row mt-2">
+            <div th:if="${param['success']}" class="param">
+                Registration successful
+            </div>
+            <div th:if="${param['error']}" class="param">
+                User Already exist
+            </div>
+
+        </div>
+
+        <div class="m-4"> Register to GenQuiz Pro.</div>
+        <div class="form-control">
+            <div class="form-con">
+                <input type="text" id="firstname" autofocus="autofocus"
+                       required class="form-control" name="firstname" th:field="*{firstname}" placeholder="firstname">
+            </div>
+        </div>
+
+        <div class="form-control">
+            <div class="form-con">
+                <input type="text" id="lastname" autofocus="autofocus"
+                       required class="form-control" name="lastname" th:field="*{lastname}" placeholder="lastname">
+            </div>
+        </div>
+
+        <div class="form-control">
+
+            <div class="form-con">
+                <input type="email" id="email" autofocus="autofocus"
+                       required class="form-control" name="email" th:field="*{email}" placeholder="email">
+            </div>
+        </div>
+
+        <div class="form-control">
+            <div class="form-con">
+                <input type="password" id="password" autofocus="autofocus"
+                       required class="form-control" name="password" th:field="*{password}" placeholder="password">
+            </div>
+        </div>
+
+
+        <button type="submit" class="btn">Register</button>
+        <span>Registered already? <a href="/" th:href="@{/login}">
+                     Login here
+                 </a></span>
+
+    </form>
+</div>
 </body>
 </html>

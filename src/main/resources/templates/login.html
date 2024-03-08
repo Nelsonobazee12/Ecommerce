@@ -1,10 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>login</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="stylesheet" th:href="@{/css/register.css}"/>
+</head>
 </head>
 <body>
-$END$
+<div class="container">
+    <div class="row mt-2">
+        <div th:if="${param.error}" class="param">
+            <p class="alert alert-danger">Invalid username or password</p>
+        </div>
+        <div th:if="${param.logout}" class="param">
+            <p class="alert alert-warning">You have been logged out.</p>
+        </div>
+        <div th:if="${param.valid}" class="param">
+            <p class="alert alert-warning">Email verified successfully, please log in here.</p>
+        </div>
+        <div th:if="${param.verified}" class="param">
+            <p class="alert alert-warning">This account has already been verified, please log in here.</p>
+        </div>
+
+    </div>
+    <form th:action="@{/authentication/login}" method="post" class="form">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <h2 class="h2">Login to GenQuiz Pro</h2>
+        <div class="form-control">
+
+            <div class="form-con">
+                <input type="email" id="email" autofocus="autofocus"
+                       required class="form-input" name="email" placeholder="enter your email address">
+            </div>
+        </div>
+
+        <div class="form-control">
+            <div class="form-con">
+                <input type="password" id="password" autofocus="autofocus"
+                       required class="form-control" name="password" placeholder="password">
+            </div>
+        </div>
+
+        <div class="but-div">
+            <button type="submit" class="btn btn-success" id="login" name="login">Login</button>
+            <span class="span">Not registered yet? <a href="#" th:href="@{/registration/registration-form} ">
+                     Register
+        </a> </span><br>
+
+        </div>
+        <a class="btn-google" href="/oauth2/authorization/google"><img src="./images/icons8-google.svg" alt="Google">login with google </a>
+        <a class="btn-fb" href="/oauth2/authorization/facebook"><img src="./images/icons8-facebook.svg" alt="Google">login with facebook</a>
+        <span><a href="/" th:href="@{/registration/forget-password-request} ">
+                    Forget Password
+        </a> </span>
+    </form>
+    <script src="https://kit.fontawesome.com/e553bc6b9d.js"
+            crossorigin="anonymous"></script>
+</div>
 </body>
 </html>
