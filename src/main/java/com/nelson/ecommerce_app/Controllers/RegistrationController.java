@@ -1,7 +1,8 @@
-package com.nelson.ecommerce_app.AuthenticationConfig.Registration;
+package com.nelson.ecommerce_app.Controllers;
 
-import com.nelson.ecommerce_app.AuthenticationConfig.AuthenticationResponse;
-import com.nelson.ecommerce_app.AuthenticationConfig.AuthenticationService;
+import com.nelson.ecommerce_app.Configuration.AuthenticationConfig.AuthenticationResponse;
+import com.nelson.ecommerce_app.Registration.RegistrationRequest;
+import com.nelson.ecommerce_app.Service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

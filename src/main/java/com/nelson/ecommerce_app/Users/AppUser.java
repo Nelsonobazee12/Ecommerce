@@ -1,6 +1,7 @@
 package com.nelson.ecommerce_app.Users;
 
 
+import com.nelson.ecommerce_app.Token.Token;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,12 +25,16 @@ public class AppUser implements UserDetails {
     private Long id;
     private String firstname;
     private String lastname;
-    @NonNull
+
     private String email;
-    @NonNull
+
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "appUser")
+    private List<Token> tokens;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -37,7 +42,7 @@ public class AppUser implements UserDetails {
     }
 
     @Override
-    public @NonNull String getPassword() {
+    public String getPassword() {
         return password;
     }
 

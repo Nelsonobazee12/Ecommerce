@@ -13,19 +13,9 @@
         <div th:if="${param.error}" class="param">
             <p class="alert alert-danger">Invalid username or password</p>
         </div>
-        <div th:if="${param.logout}" class="param">
-            <p class="alert alert-warning">You have been logged out.</p>
-        </div>
-        <div th:if="${param.valid}" class="param">
-            <p class="alert alert-warning">Email verified successfully, please log in here.</p>
-        </div>
-        <div th:if="${param.verified}" class="param">
-            <p class="alert alert-warning">This account has already been verified, please log in here.</p>
-        </div>
-
     </div>
-    <form th:action="@{/authentication/login}" method="post" class="form">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <form th:action="@{/login}" method="post" class="form"  th:object="${AuthenticationRequest}">
+<!--        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
 
         <h2 class="h2">Login to GenQuiz Pro</h2>
         <div class="form-control">

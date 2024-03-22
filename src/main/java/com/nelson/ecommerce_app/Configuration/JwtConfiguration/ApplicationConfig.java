@@ -1,7 +1,8 @@
-package com.nelson.ecommerce_app.JwtConfiguration;
+package com.nelson.ecommerce_app.Configuration.JwtConfiguration;
 
 
-import com.nelson.ecommerce_app.Users.UserRepository;
+import com.nelson.ecommerce_app.Repository.UserRepository;
+import com.nelson.ecommerce_app.Users.AppUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,9 +40,9 @@ public class ApplicationConfig {
           return daoAuthenticationProvider;
       }
 
-      @Bean
-      public UserDetailsService userDetailsService() {
-          return username -> userRepository.findByEmail(username)
-                  .orElseThrow(()-> new UsernameNotFoundException("User not found"));
-      }
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return username -> userRepository.findByEmail(username)
+                .orElseThrow(()-> new UsernameNotFoundException("User not found"));
+    }
 }

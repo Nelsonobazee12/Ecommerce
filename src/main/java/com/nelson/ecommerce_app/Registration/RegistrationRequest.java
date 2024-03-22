@@ -1,4 +1,4 @@
-package com.nelson.ecommerce_app.AuthenticationConfig.Registration;
+package com.nelson.ecommerce_app.Registration;
 
 
 import lombok.AllArgsConstructor;

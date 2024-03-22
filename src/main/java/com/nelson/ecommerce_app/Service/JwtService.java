@@ -1,9 +1,10 @@
-package com.nelson.ecommerce_app.JwtConfiguration;
+package com.nelson.ecommerce_app.Service;
 
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,11 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY = "CE5B45053D01A06FCBB9BE55974A1453CDBAF611E571CDC58ECB4A0BDB794682";
+    @Value("${application.ecommerce.jwt.secret-key}")
+    private String secretKey;
+
+    @Value("${application.ecommerce.jwt.expiration-time}")
+    private long expirationTime;
 
     public String extractUsername(String token) {
        return extractClaims(token, Claims::getSubject);
@@ -40,7 +45,7 @@ public class JwtService {
                  .claims(extraClaims)
                  .subject(userDetails.getUsername())
                  .issuedAt(new Date(System.currentTimeMillis()))
-                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                 .expiration(new Date(System.currentTimeMillis() + expirationTime))
                  .signWith(getSignInKey(), Jwts.SIG.HS256)
                  .compact();
     }
@@ -69,7 +74,7 @@ public class JwtService {
     }
 
     private SecretKey getSignInKey() {
-         byte[] keyBytes = Base64.getDecoder().decode(SECRET_KEY);
+         byte[] keyBytes = Base64.getDecoder().decode(secretKey);
          return Keys.hmacShaKeyFor(keyBytes);
    }
 
