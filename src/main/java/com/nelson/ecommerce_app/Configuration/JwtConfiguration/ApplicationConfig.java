@@ -1,8 +1,6 @@
 package com.nelson.ecommerce_app.Configuration.JwtConfiguration;
 
-
 import com.nelson.ecommerce_app.Repository.UserRepository;
-import com.nelson.ecommerce_app.Users.AppUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,26 +17,26 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-      private final UserRepository userRepository;
-      @Bean
-      public PasswordEncoder passwordEncoder() {
-          return new BCryptPasswordEncoder();
-      }
+    private final UserRepository userRepository;
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-      @Bean
-      public AuthenticationManager authenticationManager
-              (AuthenticationConfiguration configuration) throws Exception {
-          return configuration.getAuthenticationManager();
-      }
+    @Bean
+    public AuthenticationManager authenticationManager
+            (AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
 
-      @Bean
-      public AuthenticationProvider authenticationProvider() {
-          DaoAuthenticationProvider daoAuthenticationProvider
-                  = new DaoAuthenticationProvider();
-          daoAuthenticationProvider.setUserDetailsService(userDetailsService());
-          daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-          return daoAuthenticationProvider;
-      }
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider daoAuthenticationProvider
+                = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService());
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        return daoAuthenticationProvider;
+    }
 
     @Bean
     public UserDetailsService userDetailsService() {

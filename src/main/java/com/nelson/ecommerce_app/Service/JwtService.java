@@ -1,6 +1,5 @@
 package com.nelson.ecommerce_app.Service;
 
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -15,41 +14,55 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+
 @Service
 public class JwtService {
 
     @Value("${application.ecommerce.jwt.secret-key}")
     private String secretKey;
 
-    @Value("${application.ecommerce.jwt.expiration-time}")
-    private long expirationTime;
+    @Value("${application.ecommerce.jwt.expiration}")
+    private long jwtExpiration;
+
+    @Value("${application.ecommerce.jwt.refresh-token.expiration}")
+    private long refreshExpiration;
 
     public String extractUsername(String token) {
-       return extractClaims(token, Claims::getSubject);
+        return extractClaims(token,Claims::getSubject);
     }
 
     public <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
-
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
-
     }
 
-    public String generateToken(Map<String,
-            Object> extraClaims, UserDetails userDetails) {
-         return Jwts
-                 .builder()
-                 .claims(extraClaims)
-                 .subject(userDetails.getUsername())
-                 .issuedAt(new Date(System.currentTimeMillis()))
-                 .expiration(new Date(System.currentTimeMillis() + expirationTime))
-                 .signWith(getSignInKey(), Jwts.SIG.HS256)
-                 .compact();
+    public String generateToken(
+            Map<String, Object> extraClaims,
+            UserDetails userDetails
+    ) {
+        return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
+    public String generateRefreshToken(
+            UserDetails userDetails
+    ) {
+        return buildToken(new HashMap<>(), userDetails, refreshExpiration);
+    }
+
+    private String buildToken (Map<String,Object> extraClaims,
+                              UserDetails userDetails,long expiration) {
+        return Jwts
+                .builder()
+                .claims(extraClaims)
+                .subject(userDetails.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSignInKey(),Jwts.SIG.HS256)
+                .compact();
+    }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
@@ -61,7 +74,7 @@ public class JwtService {
     }
 
     private Date extractExpiration(String token) {
-        return extractClaims(token, Claims::getExpiration);
+        return extractClaims(token,Claims::getExpiration);
     }
 
     private Claims extractAllClaims(String token) {
@@ -71,11 +84,12 @@ public class JwtService {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
+
     }
 
     private SecretKey getSignInKey() {
-         byte[] keyBytes = Base64.getDecoder().decode(secretKey);
-         return Keys.hmacShaKeyFor(keyBytes);
-   }
+        byte[] keyBytes = Base64.getDecoder().decode(String.valueOf(secretKey));
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
 
 }

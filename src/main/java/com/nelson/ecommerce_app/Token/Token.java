@@ -1,33 +1,43 @@
 package com.nelson.ecommerce_app.Token;
-
-
 import com.nelson.ecommerce_app.Users.AppUser;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
 
 @Data
 @Builder
-@Entity
-@AllArgsConstructor
 @NoArgsConstructor
-@Table
+@AllArgsConstructor
+@Entity
 public class Token {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    public Integer id;
+
     @Column(unique = true)
-    private String token;
-    private boolean isExpired;
-    private boolean isRevoked;
+    public String token;
+
     @Enumerated(EnumType.STRING)
-    private TokenType tokenType = TokenType.BEARER;
+    public TokenType tokenType = TokenType.BEARER;
+
+    public boolean isRevoked;
+
+    public boolean isExpired;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    private AppUser appUser;
-
+    public AppUser appUser;
 }
+

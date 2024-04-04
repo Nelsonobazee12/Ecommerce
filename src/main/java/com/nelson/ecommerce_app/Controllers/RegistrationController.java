@@ -1,42 +1,44 @@
 package com.nelson.ecommerce_app.Controllers;
 
+import com.nelson.ecommerce_app.Configuration.AuthenticationConfig.AuthenticationRequest;
 import com.nelson.ecommerce_app.Configuration.AuthenticationConfig.AuthenticationResponse;
 import com.nelson.ecommerce_app.Registration.RegistrationRequest;
 import com.nelson.ecommerce_app.Service.AuthenticationService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.io.IOException;
+
+
+@RestController
 @RequiredArgsConstructor
-@RequestMapping("/registration")
+@RequestMapping("registration")
 public class RegistrationController {
 
-     private final AuthenticationService authenticationService;
-     @GetMapping("/registration-form")
-     public String showRegistrationForm(Model model) {
-         model.addAttribute("registrationRequest", new RegistrationRequest());
-         return "registration";
-     }
+    private final AuthenticationService authenticationService;
+    @PostMapping("/register")
+    public ResponseEntity<AuthenticationResponse> register(
+            @RequestBody RegistrationRequest request) {
 
-     @PostMapping("/register")
-     public String registerUser(@ModelAttribute("registrationRequest")
-                                     RegistrationRequest registrationRequest,
-                                RedirectAttributes redirectAttributes) {
-         try {
-             AuthenticationResponse response = authenticationService.registerNewUser(registrationRequest);
-             redirectAttributes.addAttribute("success",true);
-             return "redirect:/registration/registration-form?success";
-         }catch (Exception e) {
-             redirectAttributes.addAttribute("error",true);
-             return "redirect:/registration/registration-form?error";
-         }
+        return ResponseEntity.ok(authenticationService.registerNewUser(request));
+    }
 
-     }
+    @PostMapping("/authenticate")
+    public ResponseEntity<AuthenticationResponse> authenticate(
+            @RequestBody AuthenticationRequest request) {
+
+        return ResponseEntity.ok(authenticationService.authenticateUsers(request));
+    }
+
+    @PostMapping("/refresh-token")
+    public void refreshToken(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
+        authenticationService.refreshToken(request, response);
+    }
 
 }

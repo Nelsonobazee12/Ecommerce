@@ -1,15 +1,15 @@
 package com.nelson.ecommerce_app.Controllers;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@RequiredArgsConstructor
-@RequestMapping("/service")
+@RequestMapping
+@RestController
 public class ServiceController {
-
-    @GetMapping()
-    public String serviceLayer() {
-        return "service";
+    @GetMapping("/service")
+    public ResponseEntity<String> service() {
+        return ResponseEntity.ok("hello from secured endpoint service");
     }
 }
