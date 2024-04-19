@@ -6,6 +6,7 @@ import com.nelson.ecommerce_app.Registration.RegistrationRequest;
 import com.nelson.ecommerce_app.Service.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class RegistrationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(
+    public ResponseEntity<AuthenticationResponse> authenticate(@Valid
             @RequestBody AuthenticationRequest request) {
 
         return ResponseEntity.ok(authenticationService.authenticateUsers(request));

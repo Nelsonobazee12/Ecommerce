@@ -3,6 +3,7 @@ package com.nelson.ecommerce_app.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nelson.ecommerce_app.Configuration.AuthenticationConfig.AuthenticationRequest;
 import com.nelson.ecommerce_app.Configuration.AuthenticationConfig.AuthenticationResponse;
+import com.nelson.ecommerce_app.Exception.UserAlreadyExistException;
 import com.nelson.ecommerce_app.Registration.RegistrationRequest;
 import com.nelson.ecommerce_app.Repository.TokenRepository;
 import com.nelson.ecommerce_app.Token.Token;
@@ -22,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +37,7 @@ public class AuthenticationService {
     private final TokenRepository tokenRepository;
 
     public AuthenticationResponse registerNewUser(RegistrationRequest registration) {
+        // Build the new user object
         var user = AppUser.builder()
                 .firstname(registration.getFirstname())
                 .lastname(registration.getLastname())
@@ -44,15 +47,29 @@ public class AuthenticationService {
                 .isEnabled(String.valueOf(true))
                 .build();
 
-            var saveUser = userRepository.save(user);
-            var jwtToken = jwtService.generateToken(user);
-            var refreshToken = jwtService.generateRefreshToken(user);
-            saveUserToken(saveUser, jwtToken);
+        // Check if user already exists
+        Optional<AppUser> userExists = userRepository.findByEmail(user.getEmail());
+        if (userExists.isPresent()) {
+            throw new UserAlreadyExistException("User already exists with this email");
+        }
+
+        // Save the new user
+        var savedUser = userRepository.save(user);
+
+        // Generate JWT token and refresh token
+        var jwtToken = jwtService.generateToken(savedUser);
+        var refreshToken = jwtService.generateRefreshToken(savedUser);
+
+        // Save user token
+        saveUserToken(savedUser, jwtToken);
+
+        // Build and return authentication response
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
     }
+
 
     public AuthenticationResponse authenticateUsers(AuthenticationRequest authenticationRequest) {
            authenticationManager.authenticate(
