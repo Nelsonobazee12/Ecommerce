@@ -7,15 +7,16 @@ const useCheckTokenExpiration = () => {
     const navigate = useNavigate();
 
    const isTokenExpired = () => {
-        const token = Cookies.get('accessToken');
+        const accessToken = Cookies.get('accessToken');
+        const refreshToken = Cookies.get('refreshToken');
 
-        if (!token) {
+        if (!accessToken) {
             return true;
         }
 
         try {
-            const decodedToken = jwt_decode.jwtDecode(token);
-            const currentTime = Date.now() / 1000; // Convert milliseconds to seconds
+            const decodedToken = jwt_decode.jwtDecode(accessToken);
+            const currentTime = Date.now() / 1000;
             return currentTime >= decodedToken.exp;
         } catch (error) {
             console.error('Failed to decode JWT:', error);
@@ -25,9 +26,16 @@ const useCheckTokenExpiration = () => {
 
     useEffect(() => {
         if (isTokenExpired()) {
-            navigate('/refresh-token');
+            navigate('/login');
         }
     }, [navigate]);
+
+    useEffect(() => {
+        if (isTokenExpired()) {
+            Cookies.remove('accessToken');
+            Cookies.remove('refreshToken');
+        }
+    }, [])
 };
 
 export default useCheckTokenExpiration;

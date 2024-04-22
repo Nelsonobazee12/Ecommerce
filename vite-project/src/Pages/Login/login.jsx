@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom'; 
 import styles from "../Registration/register.module.css";
-import Error from '../Pages/Error';
+import {Error} from '../../Utils/Error.jsx';
 import Cookies from 'js-cookie';
-import { isTokenExpired } from "../Pages/utils.jsx";
 
 
 
@@ -41,7 +40,7 @@ const LoginForm = () => {
                     setCookies(accessToken, refreshToken);
 
                     setTimeout(() => {
-                        console.log('Navigating to /home');
+
                         navigate("/home");
                     }, 100);
                 } else {
@@ -50,7 +49,7 @@ const LoginForm = () => {
             })
 
             .catch(error => {
-                setError('Login failed. Please check your input or try again later.');
+                setError('Login failed. Enter a valid email or password');
                 setTimeout(() => setError(null), 2000);
             });
     };
@@ -60,14 +59,6 @@ const LoginForm = () => {
         Cookies.set('refreshToken', refreshToken, { expires: 7, secure: true, sameSite: 'strict' });
         navigate("/home");
     };
-
-
-    // useEffect(() => {
-    //     if (isTokenExpired()) {
-    //         Cookies.remove('accessToken');
-    //     }
-    // }, [])
-
 
     return (
         <div className={styles.container}>

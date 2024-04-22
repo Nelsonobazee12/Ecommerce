@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import {isAuthenticated} from "./Components/Pages/authService.jsx";
+import {isAuthenticated} from "./Utils/authService.jsx";
 
 
 const PrivateRoute = ({ element }) => {

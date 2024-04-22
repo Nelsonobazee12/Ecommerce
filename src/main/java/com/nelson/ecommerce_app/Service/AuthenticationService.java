@@ -9,7 +9,6 @@ import com.nelson.ecommerce_app.Repository.TokenRepository;
 import com.nelson.ecommerce_app.Token.Token;
 import com.nelson.ecommerce_app.Token.TokenType;
 import com.nelson.ecommerce_app.Users.AppUser;
-import com.nelson.ecommerce_app.Users.Role;
 import com.nelson.ecommerce_app.Repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

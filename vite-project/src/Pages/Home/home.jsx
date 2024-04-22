@@ -1,6 +1,6 @@
 // home.jsx
 import React from 'react';
-import useCheckTokenExpiration from './useCheckTokenExpiration';
+import useCheckTokenExpiration from '../../Utils/useCheckTokenExpiration.jsx';
 
 const Home = () => {
     useCheckTokenExpiration();

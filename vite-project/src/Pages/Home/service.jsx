@@ -1,4 +1,4 @@
-import useCheckTokenExpiration from './useCheckTokenExpiration';
+import useCheckTokenExpiration from '../../Utils/useCheckTokenExpiration.jsx';
 
 const Service = () =>  {
     useCheckTokenExpiration();

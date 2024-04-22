@@ -1,12 +1,12 @@
 // Routes.jsx
 import React from 'react';
 import { useRoutes } from 'react-router-dom';
-import LoginForm from './Components/Login/login';
-import RegistrationForm from './Components/Registration/register';
-import Home from "./Components/Pages/home.jsx";
+import LoginForm from './Pages/Login/login';
+import RegistrationForm from './Pages/Registration/register';
+import Home from "./Pages/Home/home.jsx";
 import PrivateRoute from "./PrivateRoutes.jsx";
-import Service from "./Components/Pages/service.jsx";
-import RefreshTokenAndRedirect from "./Components/Pages/tokenRefresh.jsx";
+import Service from "./Pages/Home/service.jsx";
+import RefreshTokenAndRedirect from "./Utils/tokenRefresh.jsx";
 
 
 
@@ -21,12 +21,16 @@ const Routes = () => {
             element: <RegistrationForm />,
         },
         {
+            path: '/',
+            element: <PrivateRoute element={<Home />} />,
+        },
+        {
             path: '/home',
-            element: <PrivateRoute element={<Home />} />, // Render the TestComponent
+            element: <PrivateRoute element={<Home />} />,
         },
         {
             path: '/service',
-            element: <PrivateRoute element={<Service />} />, // Render the TestComponent
+            element: <PrivateRoute element={<Service />} />,
         },
         {
             path: '/refresh-token',

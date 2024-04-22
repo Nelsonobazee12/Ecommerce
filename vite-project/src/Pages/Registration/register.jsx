@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import styles from "./register.module.css";
 import { Link } from "react-router-dom";
-import Error from '../Pages/Error';
+import {Error, Success} from '../../Utils/Error.jsx';
 import Cookies from 'js-cookie';
+
 
 const RegistrationForm = () => {
   const [registrationFormData,
@@ -14,6 +15,7 @@ const RegistrationForm = () => {
   });
 
   const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleRegistrationChange = (e) => {
     const { name, value } = e.target;
@@ -44,8 +46,11 @@ const RegistrationForm = () => {
           const { access_token, refresh_token } = data;
           if (access_token && refresh_token) {
             setCookies(access_token, refresh_token);
-            console.log('Success:', data);
+            setSuccessMessage('Registration successful!');
 
+            setTimeout(() => {
+              setSuccessMessage(null);
+            }, 2000)
           } else {
             throw new Error('Authentication token or refresh token is missing or invalid.');
           }
@@ -58,8 +63,6 @@ const RegistrationForm = () => {
           setError(null);
         }, 2000)
       });
-
-    console.log("Registering with:", registrationFormData);
   };
 
   const setCookies = (authToken, refreshToken) => {
@@ -69,12 +72,12 @@ const RegistrationForm = () => {
   };
 
 
-
   return (
     <div className={styles.container}>
       <form onSubmit={handleRegistrationSubmit} method="Post" className={styles.form}>
         <div className={styles.main}>
           {error && <Error errorMessage={error} />}
+          {successMessage && <Success successMessage={successMessage} />}
           <h2>Create Account</h2>
           
           <div className={styles.dis__flex}>

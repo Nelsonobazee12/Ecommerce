@@ -17,8 +17,19 @@
     opacity: 1;
     transition: opacity 0.5s ease-in-out;
 }
+.success-card {
+    background-color: #64ae66;
+    color: white;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
 
-.error-card.hidden {
+.error-card.hidden,.success-card.hidden {
     opacity: 0;
 }
 
